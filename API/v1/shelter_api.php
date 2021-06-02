@@ -1,5 +1,5 @@
 <?php
-include "dbConnection.php";
+include "../../config/dbConnection.php";
 
 // Set your Bot ID and Chat ID.
 $telegrambot='1799597083:AAEv7_W5uDOBt5VSYo1mWI96iv8vVOD3lUY';
@@ -117,13 +117,16 @@ if($data != null){
             $msg = "";
 
             //Return To Telegram Bot
-            $msg = $msg."CASE ID : ".$last_id."\n\n";
-            $msg = $msg."From : ".$_frm."\n";
-            $msg = $msg."Waktu : ".date("Y-m-d")."\n";
-            $msg = $msg."Type : ".$_typ."\n";
-            $msg = $msg."Pesan : ".$_msg."\n";
-            telegram ($msg);
-            // echo $msg;
+            if($tmp){        
+                $msg = $msg."CASE ID : ".$last_id."\n\n";
+                $msg = $msg."From : ".$_frm."\n";
+                $msg = $msg."Waktu : ".date("Y-m-d")."\n";
+                $msg = $msg."Type : ".$_typ."\n";
+                $msg = $msg."Pesan : ".$_msg."\n";
+                telegram ($msg);
+            }else{
+                echo "Fail";
+            }
         }
     }
     
