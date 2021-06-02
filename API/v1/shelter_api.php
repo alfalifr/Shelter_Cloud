@@ -237,7 +237,7 @@ function telegram($msg) {
 function filter_json($str, $type, $var){
     $res = array();
     foreach($str as $key => $val){
-        if($val[$type] == $var){
+        if(strtolower($val[$type]) == strtolower($var)){
             $res[] = $val;
         }
     }
