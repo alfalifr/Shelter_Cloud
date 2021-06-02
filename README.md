@@ -1,0 +1,8 @@
+Shelter API
+
+# Response Code
+101 > User Not Found\
+102 > Parameter Tidak sesuai\
+103 > User Telah Terdaftar\
+104 > Registrasi Berhasil\
+105 > Registrasi Gagal\
