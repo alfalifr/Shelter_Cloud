@@ -112,25 +112,37 @@ if($data != null){
             $data_array = json_decode($gempa_json, 1);
             $filter = "";
             if(isset($keys[1])){
-                $filter = $data[$keys[1]];
-                echo filter_json($data_array, "Name", $filter);
+                if($keys[1] == "filter"){
+                    $filter = $data[$keys[1]];
+                    echo filter_gempa($data_array, "Name", $filter);
+                }   
             }else{
                 echo $gempa_json;
             }
         }else if($data[$keys[0]] == "city"){
             $data_array = json_decode($gempa_json, 1);
             echo get_city($data_array);
-        }
-        
-        else if($data[$keys[0]] == "cuaca"){
-            $data_array = json_decode($gempa_json, 1);
+        }else if($data[$keys[0]] == "cuaca"){
+            $data_array = json_decode($cuaca_json, 1);
             $filter = "";
-            if(isset($keys[1])){
-                $filter = $data[$keys[1]];
-                echo filter_json($data_array, "Name", $filter);
+            if(isset($keys[1]) && isset($keys[2])){
+                $min = $data[$keys[1]];
+                $max = $data[$keys[2]];
+                echo filter_cuaca_1($data_array, "Date", $min, $max);
+            }else if(isset($keys[1])){
+                if($keys[1] == "min"){ //Extra Parameter {min}
+                    $min = $data[$keys[1]];
+                    echo filter_cuaca_2($data_array, "Date", $min);
+                }else if($keys[1] == "max"){ //Extra Parameter {max}
+                    $max = $data[$keys[1]];
+                    echo "F";
+                    echo filter_cuaca_3($data_array, "Date", $max);
+                }
             }else{
-                echo $gempa_json;
+                echo $cuaca_json;
             }
+        }else if($data[$keys[0]] == ""){
+
         }
 
     }else if($keys[0] == "_feedback"){
@@ -194,7 +206,7 @@ function telegram($msg) {
     return $result;
 }
 
-function filter_json($str, $type, $var){
+function filter_gempa($str, $type, $var){
     $res = array();
     foreach($str as $key => $val){
         if($val[$type] == $var){
@@ -203,6 +215,44 @@ function filter_json($str, $type, $var){
     }
     return json_encode($res);
 }
+
+function filter_cuaca_1($str, $type, $min, $max){
+    $res = array();
+    $_min = strtotime($min);
+    $_max = strtotime($max);
+    foreach($str as $key => $val){
+        $_data = strtotime($val[$type]);
+        if($_data >= $_min && $_data <= $_max){
+            $res[] = $val;
+        }
+    }
+    return json_encode($res);
+}
+
+function filter_cuaca_2($str, $type, $min){
+    $res = array();
+    $_min = strtotime($min);
+    foreach($str as $key => $val){
+        $_data = strtotime($val[$type]);
+        if($_data >= $_min){
+            $res[] = $val;
+        }
+    }
+    return json_encode($res);
+}
+
+function filter_cuaca_3($str, $type, $max){
+    $res = array();
+    $_max = strtotime($max);
+    foreach($str as $key => $val){
+        $_data = strtotime($val[$type]);
+        if($_data <= $_max){
+            $res[] = $val;
+        }
+    }
+    return json_encode($res);
+}
+
 
 function get_city($arr){
     $res = array();
@@ -214,9 +264,6 @@ function get_city($arr){
         $res[] = $val["Name"];
     }
     $res = array_unique($res);
-    echo json_encode($res);
-
-    //return json_encode($res);
+    return json_encode($res);
 }
-
 ?>
