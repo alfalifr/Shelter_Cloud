@@ -5,6 +5,12 @@ include "../../config/dbConnection.php";
 $telegrambot='1799597083:AAEv7_W5uDOBt5VSYo1mWI96iv8vVOD3lUY';
 $telegramchatid=-430782219;
 
+$gempa_json = file_get_contents('../../predict/gempa.json');
+$cuaca_json = file_get_contents('../../predict/cuaca.json');
+$longsor_json = file_get_contents('../../predict/longsor.json');
+$banjir_json = file_get_contents('../../predict/banjir.json');
+
+
 $json = file_get_contents('php://input');
 $data = json_decode($json, TRUE);
 $keys = array();
@@ -12,9 +18,11 @@ if($data != null){
     foreach($data as $key => $val){
         array_push($keys, $key);
     }
+
     if(!isset($_SESSION)){
         session_start();
     }
+
     if($keys[0] == "_authType"){
         if ($data[$keys[0]] == "_login" && count($keys) == 3){
             if($keys[1] == "_email" && $keys[2] == "_password"){
@@ -100,6 +108,18 @@ if($data != null){
                 array_push($result, $arrTmp);
             }
             echo json_encode($result);
+        }else if($data[$keys[0]] == "gempa"){
+            $data_array = json_decode($gempa_json, 1);
+            $filter = "";
+            if(isset($keys[1])){
+                $filter = $data[$keys[1]];
+                echo filter_json($data_array, "Name", $filter);
+            }else{
+                echo $gempa_json;
+            }
+        }else if($data[$keys[0]] == "cuaca"){
+
+            echo $gempa_json;
         }
 
     }else if($keys[0] == "_feedback"){
@@ -129,7 +149,7 @@ if($data != null){
             }
         }
     }
-    
+
     else{
         echo failCode('failed',102);
     }       
@@ -164,5 +184,16 @@ function telegram($msg) {
     $context=stream_context_create($options);
     $result=file_get_contents($url,false,$context);
     return $result;
+}
+
+function filter_json($str, $type, $var){
+    $res = array();
+    foreach($str as $key => $val){
+        if($val[$type] == $var){
+            $res[] = $val;
+        }
+    }
+    
+    return json_encode($res);
 }
 ?>
