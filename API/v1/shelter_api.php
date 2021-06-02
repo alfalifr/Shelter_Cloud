@@ -173,7 +173,6 @@ if($data != null){
                 echo $karhutla_json;
             }
         }
-
     }else if($keys[0] == "_feedback"){
         
         if($data[$keys[0]] == true){
