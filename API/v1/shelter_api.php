@@ -10,9 +10,11 @@ $gempa_json = file_get_contents('../../predict/gempa.json');
 $cuaca_json = file_get_contents('../../predict/cuaca.json');
 $longsor_json = file_get_contents('../../predict/longsor.json');
 $banjir_json = file_get_contents('../../predict/banjir.json');
+$karhutla_json = file_get_contents('../../predict/karhutla.json');
 
-$APIKey = 'AIzaSyAkcSHfUPapq-imV7lSclFfniLmwQHw4co';
-$GeoURI = 'https://maps.googleapis.com/maps/api/geocode/json';
+// //GCP API
+// $APIKey = 'AIzaSyAkcSHfUPapq-imV7lSclFfniLmwQHw4co';
+// $GeoURI = 'https://maps.googleapis.com/maps/api/geocode/json';
 
 $json = file_get_contents('php://input');
 $data = json_decode($json, TRUE);
@@ -122,9 +124,9 @@ if($data != null){
             }else{
                 echo $gempa_json;
             }
-        }else if($data[$keys[0]] == "city"){
+        }else if($data[$keys[0]] == "city_gempa"){
             $data_array = json_decode($gempa_json, 1);
-            echo get_city($data_array);
+            echo get_city($data_array, "Name");
         }else if($data[$keys[0]] == "cuaca"){
             $data_array = json_decode($cuaca_json, 1);
             $filter = "";
@@ -154,6 +156,21 @@ if($data != null){
                 }   
             }else{
                 echo $longsor_json;
+            }
+        }else if($data[$keys[0]] == "city_longsor"){
+            $data_array = json_decode($longsor_json, 1);
+            echo get_city($data_array, "lokasi");
+        }else if($data[$keys[0]] == "karhutla"){
+            $data_array = json_decode($karhutla_json, 1);
+            $filter = "";
+            if(isset($keys[1])){
+                if($keys[1] == "filter_city" && $keys[2] == "value"){
+                    $filter = $data[$keys[1]];
+                    $field = $data[$keys[2]];
+                    echo filter_json($data_array, $filter, $field);
+                }
+            }else{
+                echo $karhutla_json;
             }
         }
 
@@ -265,17 +282,17 @@ function filter_cuaca_3($str, $type, $max){
     return json_encode($res);
 }
 
-
-function get_city($arr){
+function get_city($arr, $field){
     $res = array();
-    foreach($arr as $key => $val){
-        // if($val[$type] == $var){
-        //     $res[] = $val;
-        // }
-        
-        $res[] = $val["Name"];
+    foreach($arr as $key => $val){   
+        $res[] = $val[$field];
     }
     $res = array_unique($res);
-    return json_encode($res);
+    foreach($res as $key => $val){
+        $rex[] = array(
+            $val
+        );
+    }
+    return json_encode($rex);
 }
 ?>
