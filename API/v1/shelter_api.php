@@ -5,11 +5,11 @@ include "../../config/dbConnection.php";
 $telegrambot='1799597083:AAEv7_W5uDOBt5VSYo1mWI96iv8vVOD3lUY';
 $telegramchatid=-430782219;
 
+//Open Json FILE
 $gempa_json = file_get_contents('../../predict/gempa.json');
 $cuaca_json = file_get_contents('../../predict/cuaca.json');
 $longsor_json = file_get_contents('../../predict/longsor.json');
 $banjir_json = file_get_contents('../../predict/banjir.json');
-
 
 $json = file_get_contents('php://input');
 $data = json_decode($json, TRUE);
@@ -117,9 +117,20 @@ if($data != null){
             }else{
                 echo $gempa_json;
             }
-        }else if($data[$keys[0]] == "cuaca"){
-
-            echo $gempa_json;
+        }else if($data[$keys[0]] == "city"){
+            $data_array = json_decode($gempa_json, 1);
+            echo get_city($data_array);
+        }
+        
+        else if($data[$keys[0]] == "cuaca"){
+            $data_array = json_decode($gempa_json, 1);
+            $filter = "";
+            if(isset($keys[1])){
+                $filter = $data[$keys[1]];
+                echo filter_json($data_array, "Name", $filter);
+            }else{
+                echo $gempa_json;
+            }
         }
 
     }else if($keys[0] == "_feedback"){
@@ -149,15 +160,12 @@ if($data != null){
             }
         }
     }
-
     else{
         echo failCode('failed',102);
     }       
 }else{
     echo failCode('failed',102);
 }
-
-
 
 function failCode($res, $code){
     $result = array(
@@ -193,7 +201,22 @@ function filter_json($str, $type, $var){
             $res[] = $val;
         }
     }
-    
     return json_encode($res);
 }
+
+function get_city($arr){
+    $res = array();
+    foreach($arr as $key => $val){
+        // if($val[$type] == $var){
+        //     $res[] = $val;
+        // }
+        
+        $res[] = $val["Name"];
+    }
+    $res = array_unique($res);
+    echo json_encode($res);
+
+    //return json_encode($res);
+}
+
 ?>
