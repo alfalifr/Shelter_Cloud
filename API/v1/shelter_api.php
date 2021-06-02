@@ -11,6 +11,9 @@ $cuaca_json = file_get_contents('../../predict/cuaca.json');
 $longsor_json = file_get_contents('../../predict/longsor.json');
 $banjir_json = file_get_contents('../../predict/banjir.json');
 
+$APIKey = 'AIzaSyAkcSHfUPapq-imV7lSclFfniLmwQHw4co';
+$GeoURI = 'https://maps.googleapis.com/maps/api/geocode/json';
+
 $json = file_get_contents('php://input');
 $data = json_decode($json, TRUE);
 $keys = array();
@@ -114,7 +117,7 @@ if($data != null){
             if(isset($keys[1])){
                 if($keys[1] == "filter"){
                     $filter = $data[$keys[1]];
-                    echo filter_gempa($data_array, "Name", $filter);
+                    echo filter_json($data_array, "Name", $filter);
                 }   
             }else{
                 echo $gempa_json;
@@ -141,8 +144,17 @@ if($data != null){
             }else{
                 echo $cuaca_json;
             }
-        }else if($data[$keys[0]] == ""){
-
+        }else if($data[$keys[0]] == "longsor"){
+            $data_array = json_decode($longsor_json, 1);
+            $filter = "";
+            if(isset($keys[1])){
+                if($keys[1] == "filter"){
+                    $filter = $data[$keys[1]];
+                    echo filter_json($data_array, "lokasi", $filter);
+                }   
+            }else{
+                echo $longsor_json;
+            }
         }
 
     }else if($keys[0] == "_feedback"){
@@ -206,7 +218,7 @@ function telegram($msg) {
     return $result;
 }
 
-function filter_gempa($str, $type, $var){
+function filter_json($str, $type, $var){
     $res = array();
     foreach($str as $key => $val){
         if($val[$type] == $var){
