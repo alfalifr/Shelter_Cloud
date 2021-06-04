@@ -19,7 +19,7 @@ $karhutla_json = file_get_contents('../../predict/karhutla.json');
 $json = file_get_contents('php://input');
 $data = json_decode($json, TRUE);
 $keys = array();
-if($data != null){
+if($data != null && $_SERVER['REQUEST_METHOD']=="POST"){
     foreach($data as $key => $val){
         array_push($keys, $key);
     }
@@ -51,32 +51,31 @@ if($data != null){
                    echo failCode('failed',101);
                 }
             }
-        }else if ($data[$keys[0]] == "_register" && count($keys) == 5){
-            if($keys[1] == "_email" && $keys[2] == "_password" && $keys[3] == "_fname" && $keys[4] == "_gender" ){
+        }else if ($data[$keys[0]] == "_register" && count($keys) == 6){ //Max Parameter
+            if($keys[1] == "_email" && $keys[2] == "_password" && $keys[3] == "_fname" && $keys[4] == "_gender" && $keys[5] == "_img"){
                 $usr = $data[$keys[1]];
                 $pwd = $data[$keys[2]];
                 $nam = $data[$keys[3]];
                 $gnd = $data[$keys[4]];
-                $qry = "SELECT * FROM user_auth WHERE _email='$usr' AND _passwd='$pwd' ";
-                $tmp =  $conn -> query($qry);
-                $data = $tmp -> fetch_array();
-                if($usr != $data['_email']){
-                    $qry = "INSERT INTO user_auth(_email, _passwd, _fname, _addr, _gender) VALUES ('$usr','$pwd','$nam', DEFAULT ,'$gnd')";
-                    $exe = $conn -> query($qry);
-                    if($exe){
-                        echo failCode('success',104);
-                    }else{
-                        echo failCode('failed',105);
-                    }
-                }else{
-                   echo failCode('failed',103);
-                }
+                $img = $data[$keys[5]];
+                var_dump(base64_decode($img));
+                file_put_contents("a.png", file_get_contents($img));
+                //var_dump()
+                // $qry = "SELECT * FROM user_auth WHERE _email='$usr' AND _passwd='$pwd' ";
+                // $tmp =  $conn -> query($qry);
+                // $data = $tmp -> fetch_array();
+                // if($usr != $data['_email']){
+                //     $qry = "INSERT INTO user_auth(_email, _passwd, _fname, _addr, _gender) VALUES ('$usr','$pwd','$nam', DEFAULT ,'$gnd')";
+                //     $exe = $conn -> query($qry);
+                //     if($exe){
+                //         echo failCode('success',104);
+                //     }else{
+                //         echo failCode('failed',105);
+                //     }
+                // }else{
+                //    echo failCode('failed',103);
+                // }
             } 
-        } else if ($data[$keys[0]] == "_getBerita" && count($keys) == 5){
-
-        }
-        else{
-            echo failCode('failed',102);
         } 
     }else if ($keys[0] == "_requestType"){
         if($data[$keys[0]] == 1){
@@ -130,7 +129,7 @@ if($data != null){
         }else if($data[$keys[0]] == "cuaca"){
             $data_array = json_decode($cuaca_json, 1);
             $filter = "";
-            if(isset($keys[1]) && isset($keys[2])){
+            if(isset($keys[1]) && isset($keys[2]) || isset($keys[2]) && isset($keys[1])){
                 $min = $data[$keys[1]];
                 $max = $data[$keys[2]];
                 echo filter_cuaca_1($data_array, "Date", $min, $max);
@@ -172,6 +171,12 @@ if($data != null){
             }else{
                 echo $karhutla_json;
             }
+        }else if($data[$keys[0]] == "city_karhutla"){
+
+        }else if($data[$keys[0]] == "banjir"){
+            
+        }else if($data[$keys[0]] == "city_banjir"){
+
         }
     }else if($keys[0] == "_feedback"){
         
@@ -179,6 +184,8 @@ if($data != null){
             $_frm = $data[$keys[1]];
             $_typ = $data[$keys[2]];
             $_msg = $data[$keys[3]];
+            // if($data[])
+            // $_img = $data[$keys[]];
 
             //Insert Data ti Mysql First
             $qry = "INSERT INTO report(_from, _method, _type, _status, _msg) VALUES ('$_frm', DEFAULT ,'$_typ', DEFAULT ,'$_msg')";
@@ -250,7 +257,7 @@ function filter_cuaca_1($str, $type, $min, $max){
     $_max = strtotime($max);
     foreach($str as $key => $val){
         $_data = strtotime($val[$type]);
-        if($_data >= $_min && $_data <= $_max){
+        if($_data >= $_max && $_data <= $_min  || $_data >= $_min && $_data <= $_max){
             $res[] = $val;
         }
     }
