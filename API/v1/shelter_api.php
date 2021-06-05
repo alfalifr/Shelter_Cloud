@@ -59,7 +59,6 @@ if($data != null && $_SERVER['REQUEST_METHOD']=="POST"){
                 $nam = $data[$keys[3]];
                 $gnd = $data[$keys[4]];
                 
-                echo $usr;
                 $qry = "SELECT * FROM user_auth WHERE _email='$usr' AND _passwd='$pwd' ";
                 $tmp =  $conn -> query($qry);
                 $data = $tmp -> fetch_array();
