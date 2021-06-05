@@ -11,6 +11,7 @@ $cuaca_json = file_get_contents('../../predict/cuaca.json');
 $longsor_json = file_get_contents('../../predict/longsor.json');
 $banjir_json = file_get_contents('../../predict/banjir.json');
 $karhutla_json = file_get_contents('../../predict/karhutla.json');
+$karhutla_city = file_get_contents('../../predict/karhutla_city.json');
 
 // //GCP API
 // $APIKey = 'AIzaSyAkcSHfUPapq-imV7lSclFfniLmwQHw4co';
@@ -170,7 +171,7 @@ if($data != null && $_SERVER['REQUEST_METHOD']=="POST"){
                 echo $karhutla_json;
             }
         }else if($data[$keys[0]] == "city_karhutla"){
-
+            echo $karhutla_city;
         }else if($data[$keys[0]] == "banjir"){
             $data_array = json_decode($banjir_json, 1);
             $filter = "";
@@ -311,5 +312,12 @@ function get_city($arr, $field){
     }
     
     return json_encode($rex);
+}
+
+function get_key($arr){
+    foreach($arr as $key => $val) {
+        echo "KEY IS: $key<br/>";
+        
+    }
 }
 ?>
