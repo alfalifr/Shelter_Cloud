@@ -51,7 +51,7 @@ if($data != null && $_SERVER['REQUEST_METHOD']=="POST"){
                    echo failCode('failed',101);
                 }
             }
-        }else if ($data[$keys[0]] == "_register" && count($keys) == 5){ //Max Parameter
+        }else if ($data[$keys[0]] == "_register" && count($keys) == 5){ //Max Parameter+
             if($keys[1] == "_email" && $keys[2] == "_password" && $keys[3] == "_fname" && $keys[4] == "_gender"){
                 $usr = $data[$keys[1]];
                 $pwd = $data[$keys[2]];
@@ -172,9 +172,21 @@ if($data != null && $_SERVER['REQUEST_METHOD']=="POST"){
         }else if($data[$keys[0]] == "city_karhutla"){
 
         }else if($data[$keys[0]] == "banjir"){
+            $data_array = json_decode($banjir_json, 1);
+            $filter = "";
+            if(isset($keys[1])){
+                if($keys[1] == "filter"){
+                    $filter = $data[$keys[1]];
+                    echo filter_json($data_array, "desa", $filter);
+                }   
+            }else{
+                echo $banjir_json;
+            }
+
             
         }else if($data[$keys[0]] == "city_banjir"){
-
+            $data_array = json_decode($banjir_json, 1);
+            echo get_city($data_array, "desa");
         }
     }else if($keys[0] == "_feedback"){
         
@@ -293,10 +305,11 @@ function get_city($arr, $field){
     }
     $res = array_unique($res);
     foreach($res as $key => $val){
-        $rex[] = array(
+        $rex[] = (object)[
             $val
-        );
+        ];
     }
+    
     return json_encode($rex);
 }
 ?>
