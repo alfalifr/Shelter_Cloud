@@ -184,7 +184,7 @@ if($data != null && $_SERVER['REQUEST_METHOD']=="POST"){
             }
 
             
-        }else if($data[$keys[0]] == "city_banjir"){
+        }else if($data[$keys[0]] == "desa_banjir"){
             $data_array = json_decode($banjir_json, 1);
             echo get_city($data_array, "desa");
         }
