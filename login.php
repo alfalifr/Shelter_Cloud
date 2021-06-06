@@ -1,38 +1,41 @@
 <?php
-include 'config/dbConnection.php';
 if(!isset($_SESSION)){
     session_start();
 }
-  
 //Jika Terdapat Sesi Aktif
 if(isset($_SESSION['PHPSESSID'])){
     header('location: index.php');
 }
-
-if(isset($_POST['login'])){
-    $usr = $_POST['_email'];
-    $pwd = $_POST['_password'];
-
-    //Cek Data
-    $qry = "SELECT * FROM user_auth WHERE _email='$usr' AND _passwd='$pwd' ";
-    $tmp =  $conn -> query($qry);
-    $data = $tmp -> fetch_array();
-
-    //Kondisi
-    if($usr == $data['_email'] && $pwd == $data['_passwd']){
-        $_SESSION['mail'] = $data['_email'];
-        $_SESSION['currloc'] = $data['_addr'];
-        $_SESSION['name'] = $data['_fname'];
-        $_SESSION['PHPSESSID'] = $data['_fname']." - ".$data['_email'];
-        //header('location: index.php');
+$API = "http://35.240.165.229/API/v1/shelter_api.php";
+if(!empty($_POST)){
+    $data = array(
+        "_authType" => $_POST["_authType"],
+        "_email" => $_POST["_email"],
+        "_password" => $_POST["_password"]
+    );
+    $json_enc = json_encode($data);
+    $ch = curl_init($API);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $json_enc);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $result = curl_exec($ch);
+    
+    $val = json_decode($result);
+    if($val->response == "success"){
+        session_start();
+        $_SESSION['mail'] = $val->data->email;
+        $_SESSION['currloc'] = $val->data->address;
+        $_SESSION['name'] = $val->data->full_name;
+        $_SESSION['PHPSESSID'] = $val->data->full_name." - ".$val->data->email;
         echo "<script>if(!alert('Login Berhasil!')){ window.location.replace('index.php'); }</script>";
     }else{
-      //Nampilin Info Salah
-      
-      echo "<script>if(!alert('User Tidak Terdaftar, silahkan Daftar Melalui Aplikasi Kami!')){ window.location.replace('login.php'); }</script>";
-      
+        echo "<script>if(!alert('User Tidak Terdaftar, silahkan Daftar Melalui Aplikasi Kami!')){ window.location.replace('login.php'); }</script>";
     }
-}else{ ?>
+    curl_close($ch);
+}
+
+?>
+
 <!doctype html>
 <html lang="en" class="h-100">
 
@@ -55,19 +58,21 @@ if(isset($_POST['login'])){
             <div class="row h-100 justify-content-center align-items-center">
                 <div class="col-10 col-md-8 col-lg-6">
 					<!-- Form -->
-                	<form class="form-example" method="post">
+                	<form class="form-example" method="POST" action="login.php">
                 		<h1>Shelter</h1>
                 		<p class="description">Being people helper by reveal disaster.</p>
+                        <input type="hidden" id="_authType" name="_authType" value="_login">
                 		<!-- Input fields -->
+                        
                 		<div class="form-group">
                 			<label for="username">E-Mail:</label>
-                			<input type="text" class="form-control username" id="username" placeholder="E-Mail" name="_email" autocomplete="off">
+                			<input type="email" class="form-control username" id="_email" placeholder="Email..." name="_email" required >
                 		</div>
 						<div class="form-group">
 							<label for="password">Password:</label>
-							<input type="password" class="form-control password" id="password" placeholder="Password..." name="_password" autocomplete="off">
+							<input type="password" class="form-control password" id="_password" placeholder="Password..." name="_password" required>
 						</div>
-						<button class="btn btn-primary btn-customized" type="submit" name="login">Login</button>
+						<button class="btn btn-primary btn-customized" type="submit">Login</button>
                 		<!-- End input fields -->
                 		<p class="copyright">&copy; Team ID: B21-CAP0111</p>
                 	</form>
@@ -82,5 +87,3 @@ if(isset($_POST['login'])){
         <script src="assets/js/scripts.js"></script>
     </body>
 </html>
-
-<?php } ?>

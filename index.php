@@ -1,31 +1,85 @@
-<?php 
-include 'config/dbConnection.php';
-if(isset($_SESSION['PHPSESSID'])){
-    header('location: login.php');
-}else{
+<?php
+if(!isset($_SESSION)){
+  session_start();
+}
+//Jika Terdapat Sesi Aktif
+if(!isset($_SESSION['PHPSESSID'])){
+  header('location: login.php');
+}
 ?>
+
 <!doctype html>
-<html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<html lang="en" class="h-100">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <head>
 
-    <title>Shelter Feedback | Early Warning Disaster</title>
-  </head>
-  <body>
-    <div class="container-fluid">
+		<!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        
+        <title>Login | Shelter Feedback</title>
 
-    </div>
+        <!-- CSS -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,600">
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="assets/css/style.css">
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-  </body>
+    </head>
+    <body class="h-100">
+    	<div class="container h-100">
+            <div class="row h-100 justify-content-center align-items-center">
+                <div class="col-10 col-md-8 col-lg-6">
+					<!-- Form -->
+                	<form class="form-example" method="POST" action="login.php">
+                		<h1>Shelter Feedback Form</h1>
+                		<p class="description">Being people helper by reveal disaster.</p>
+                    <input type="hidden" id="_authType" name="_authType" value="_login">
+                		
+                    <!-- Input fields -->
+                		<div class="form-group">
+                			<input type="text" class="form-control" placeholder="E-Mail" readonly value="<?= $_SESSION['PHPSESSID'] ?>">
+                		</div>
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01">State</label>
+                      </div>
+                      <select class="custom-select" id="inputGroupSelect01">
+                        <option selected>Choose...</option>
+                        <option value="Feedback">Feedback</option>
+                        <option value="Floods">Floods</option>
+                        <option value="Earthquake">Earthquake</option>
+                        <option value="Avalanche">Avalanche</option>
+                        <option value="Forest fires">Forest fires</option>
+                      </select>
+                    </div>
+
+                    <div class="input-group  mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">Message</span>
+                      </div>
+                      <textarea class="form-control" aria-label="With textarea" style="height: 200px"></textarea>
+                    </div>
+
+                    <div class="input-group mb-4">
+                      <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="inputGroupFile02">
+                        <label class="custom-file-label" for="inputGroupFile02">Choose Picture</label>
+                      </div>
+                    </div>
+						        
+                    <button class="btn btn-success" type="submit">Lapor</button>
+                    <button class="btn btn-danger"><a href="logout.php" >Logout</a></button>
+                		<!-- End input fields -->
+                		<p class="copyright">&copy; Team ID: B21-CAP0111</p>
+                	</form>
+					<!-- Form end -->
+                </div>
+            </div>
+        </div>
+		<!-- Javascript -->
+		<script src="assets/js/jquery-3.3.1.min.js"></script>
+		<script src="assets/js/jquery-migrate-3.0.0.min.js"></script>
+        <script src="assets/js/jquery.backstretch.min.js"></script>
+        <script src="assets/js/scripts.js"></script>
+    </body>
 </html>
-<?php } ?>
