@@ -44,9 +44,10 @@ while(true){
                     $msg = "";
                     $msg = $msg."CASE ID : ".$dat['id_report']."\n\n";
                     $msg = $msg."From : ".$mail."\n";
-                    $msg = $msg."Waktu : ".$dat['_timestamp']."\n";
+                    $msg = $msg."Time : ".$dat['_timestamp']."\n";
                     $msg = $msg."Type : ".$dat['_type']."\n";
-                    $msg = $msg."Pesan : ".$dat['_msg']."\n";
+                    $msg = $msg."Message : ".$dat['_msg']."\n";
+                    $msg = $msg."Picture : ".$dat['_photoLink']."\n";
                     telegram($msg);
                 }
             }else if (explode("#", $rst)[0] == "done"){
@@ -63,9 +64,10 @@ while(true){
                     $msg = "";
                     $msg = $msg."CASE ID : ".$dat['id_report']."\n\n";
                     $msg = $msg."From : ".$mail."\n";
-                    $msg = $msg."Waktu : ".$dat['_timestamp']."\n";
+                    $msg = $msg."Time : ".$dat['_timestamp']."\n";
                     $msg = $msg."Type : ".$dat['_type']."\n";
-                    $msg = $msg."Pesan : ".$dat['_msg']."\n";
+                    $msg = $msg."Message : ".$dat['_msg']."\n";
+                    $msg = $msg."Picture : ".$dat['_photoLink']."\n";
                     $msg = $msg."Respon Admin : ".$dat['_response']."\n";
                     telegram($msg);
                 }
