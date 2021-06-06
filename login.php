@@ -6,7 +6,8 @@ if(!isset($_SESSION)){
 if(isset($_SESSION['PHPSESSID'])){
     header('location: index.php');
 }
-$API = "http://35.240.165.229/API/v1/shelter_api.php";
+
+$API = "API/v1/shelter_api.php";
 if(!empty($_POST)){
     $data = array(
         "_authType" => $_POST["_authType"],
