@@ -15,23 +15,26 @@ if(!empty($_POST)){
         "_password" => $_POST["_password"]
     );
     $json_enc = json_encode($data);
+    
     $ch = curl_init($API);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $json_enc);
     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $result = curl_exec($ch);
+    var_dump($result);
     
     $val = json_decode($result);
-    if($val->response == "success"){
-        session_start();
-        $_SESSION['mail'] = $val->data->email;
-        $_SESSION['currloc'] = $val->data->address;
-        $_SESSION['name'] = $val->data->full_name;
-        $_SESSION['PHPSESSID'] = $val->data->full_name." - ".$val->data->email;
-        echo "<script>if(!alert('Login Berhasil!')){ window.location.replace('index.php'); }</script>";
-    }else{
-        echo "<script>if(!alert('User Tidak Terdaftar, silahkan Daftar Melalui Aplikasi Kami!')){ window.location.replace('login.php'); }</script>";
-    }
+    
+    // if($val->response == "success"){
+    //     session_start();
+    //     $_SESSION['mail'] = $val->data->email;
+    //     $_SESSION['currloc'] = $val->data->address;
+    //     $_SESSION['name'] = $val->data->full_name;
+    //     $_SESSION['PHPSESSID'] = $val->data->full_name." - ".$val->data->email;
+    //     echo "<script>if(!alert('Login Berhasil!')){ window.location.replace('index.php'); }</script>";
+    // }else{
+    //     // echo "<script>if(!alert('User Tidak Terdaftar, silahkan Daftar Melalui Aplikasi Kami!')){ window.location.replace('login.php'); }</script>";
+    // }
     curl_close($ch);
 }
 
