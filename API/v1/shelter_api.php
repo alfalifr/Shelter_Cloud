@@ -38,7 +38,7 @@ if($data != null && $_SERVER['REQUEST_METHOD']=="POST"){
                 $tmp =  $conn -> query($qry);
                 $data = $tmp -> fetch_array();
                 if($usr == $data['_email'] && $pwd == $data['_passwd']){
-                    $result[] = array(
+                    $result = array(
                         'response' => 'success',
                         'data' => array(
                             'id' => $data['id_auth'],
