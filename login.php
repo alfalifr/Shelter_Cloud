@@ -21,6 +21,7 @@ if(!empty($_POST)){
     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $result = curl_exec($ch);
+    curl_getinfo($ch);
     var_dump($result);
     
     $val = json_decode($result);
