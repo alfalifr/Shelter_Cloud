@@ -6,8 +6,7 @@ if(!isset($_SESSION)){
 if(isset($_SESSION['PHPSESSID'])){
     header('location: index.php');
 }
-
-$API = "API/v1/shelter_api.php";
+$API = "http://35.240.165.229/API/v1/shelter_api.php";
 if(!empty($_POST)){
     $data = array(
         "_authType" => $_POST["_authType"],
@@ -15,14 +14,12 @@ if(!empty($_POST)){
         "_password" => $_POST["_password"]
     );
     $json_enc = json_encode($data);
-    var_dump($json_enc);
-     
+    
     $ch = curl_init($API);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $json_enc);
     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $result = curl_exec($ch);
-    curl_getinfo($ch);
     var_dump($result);
     
     $val = json_decode($result);
