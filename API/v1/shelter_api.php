@@ -212,9 +212,10 @@ if($data != null && $_SERVER['REQUEST_METHOD']=="POST"){
             if($tmp){        
                 $msg = $msg."CASE ID : ".$last_id."\n\n";
                 $msg = $msg."From : ".$_frm."\n";
-                $msg = $msg."Waktu : ".date("Y-m-d")."\n";
+                $msg = $msg."Time : ".date("Y-m-d")."\n";
                 $msg = $msg."Type : ".$_typ."\n";
-                $msg = $msg."Pesan : ".$_msg."\n";
+                $msg = $msg."Message : ".$_msg."\n";
+                $msg = $msg."Picture : ".$_img."\n";
                 telegram ($msg);
             }else{
                 echo "Fail";
