@@ -309,6 +309,7 @@ function get_city($arr, $field){
             $val
         ];
     }
+    sort($rex);
     
     return json_encode($rex);
 }
