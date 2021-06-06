@@ -44,6 +44,7 @@ if($data != null && $_SERVER['REQUEST_METHOD']=="POST"){
                             'id' => $data['id_auth'],
                             'email' => $data['_email'],
                             'full_name' => $data['_fname'],
+                            'address' => $data['_addr'],
                             'gender' => $data['_gender']
                         )
                     );
