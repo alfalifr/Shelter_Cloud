@@ -193,17 +193,16 @@ if($data != null && $_SERVER['REQUEST_METHOD']=="POST"){
             $data_array = json_decode($banjir_json, 1);
             echo get_city($data_array, "desa");
         }
-    }else if($keys[0] == "_feedback"){
+    }else if($keys[0] == "_feedback" && $keys[1] == "from" && $keys[2] == "type" && $keys[3] == "msg" && $keys[4] == "imglink" ) {
         
         if($data[$keys[0]] == true){
             $_frm = $data[$keys[1]];
             $_typ = $data[$keys[2]];
             $_msg = $data[$keys[3]];
-            // if($data[])
-            // $_img = $data[$keys[]];
+            $_img = $data[$keys[4]];
 
             //Insert Data ti Mysql First
-            $qry = "INSERT INTO report(_from, _method, _type, _status, _msg) VALUES ('$_frm', DEFAULT ,'$_typ', DEFAULT ,'$_msg')";
+            $qry = "INSERT INTO report(_from, _method, _type, _status, _msg, _photoLink) VALUES ('$_frm', DEFAULT ,'$_typ', DEFAULT ,'$_msg', '$_img')";
             $tmp = $conn -> query($qry);
 
             $last_id = mysqli_insert_id($conn);

@@ -6,24 +6,47 @@ if(!isset($_SESSION)){
 if(!isset($_SESSION['PHPSESSID'])){
   header('location: login.php');
 }
-
+$IMGUR = "https://api.imgur.com/3/upload";
 $API = "http://35.240.165.229/API/v1/shelter_api.php";
 if(!empty($_POST)){
-    $data = array(
-        "_feedback" => true,
-        "from" => $_POST["userreport"],
-        "type" => $_POST["state"],
-        "msg" => $_POST["message"]
-    );
-    $json_enc = json_encode($data);
+  $img=$_FILES['img'];
+  $filename = $img['tmp_name'];
+  $client_id="e6392bda16ff035";
+  $handle = fopen($filename, "r");
+  $data = fread($handle, filesize($filename));
+  $pvars   = array('image' => base64_encode($data));
+  $timeout = 30;
+  $curl = curl_init();
+  curl_setopt($curl, CURLOPT_URL, 'https://api.imgur.com/3/image.json');
+  curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
+  curl_setopt($curl, CURLOPT_HTTPHEADER, array('Authorization: Client-ID ' . $client_id));
+  curl_setopt($curl, CURLOPT_POST, 1);
+  curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+  curl_setopt($curl, CURLOPT_POSTFIELDS, $pvars);
+  $out = curl_exec($curl);
+  curl_close ($curl);
+  $pms = json_decode($out,true);
+  $url=$pms['data']['link'];
+
+  echo $url;
+
+
+
+  // $data = array(
+  //   "_feedback" => true,
+  //   "from" => $_POST["userreport"],
+  //   "type" => $_POST["state"],
+  //   "msg" => $_POST["message"]
+  // );
+  // $json_enc = json_encode($data);
     
-    $ch = curl_init($API);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $json_enc);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_exec($ch);
-    echo "<script>if(!alert('Laporan Anda Terkirim')){ window.location.replace('index.php'); }</script>";
-    curl_close($ch);
+  // $ch = curl_init($API);
+  // curl_setopt($ch, CURLOPT_POSTFIELDS, $json_enc);
+  // curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+  // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+  // curl_exec($ch);
+  // echo "<script>if(!alert('Laporan Anda Terkirim')){ window.location.replace('index.php'); }</script>";
+  // curl_close($ch);
 }
 
 ?>
@@ -50,7 +73,7 @@ if(!empty($_POST)){
             <div class="row h-100 justify-content-center align-items-center">
                 <div class="col-10 col-md-8 col-lg-6">
 					<!-- Form -->
-                	<form class="form-example" method="POST" action="index.php">
+                	<form class="form-example" method="POST" action="index.php" enctype="multipart/form-data">
                 		<h1>Shelter Feedback Form</h1>
                 		<p class="description">Being people helper by reveal disaster.</p>
                 		
@@ -62,8 +85,7 @@ if(!empty($_POST)){
                       <div class="input-group-prepend">
                         <label class="input-group-text" for="inputGroupSelect01">State</label>
                       </div>
-                      <select class="custom-select" id="inputGroupSelect01" name="state">
-                        <option selected>Choose...</option>
+                      <select class="custom-select" id="inputGroupSelect01" name="state" required>
                         <option value="Feedback">Feedback</option>
                         <option value="Floods">Floods</option>
                         <option value="Earthquake">Earthquake</option>
@@ -76,12 +98,12 @@ if(!empty($_POST)){
                       <div class="input-group-prepend">
                         <span class="input-group-text">Message</span>
                       </div>
-                      <textarea class="form-control" aria-label="With textarea" style="height: 200px" name="message"></textarea>
+                      <textarea class="form-control" aria-label="With textarea" style="height: 200px" name="message" required></textarea>
                     </div>
 
                     <div class="input-group mb-4">
                       <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="inputGroupFile02">
+                        <input type="file" class="custom-file-input" id="inputGroupFile02" name="img" required>
                         <label class="custom-file-label" for="inputGroupFile02">Choose Picture</label>
                       </div>
                     </div>
@@ -102,19 +124,3 @@ if(!empty($_POST)){
         <script src="assets/js/scripts.js"></script>
     </body>
 </html>
-
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Laporan Terkirim</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        Loporan Terkirim. admin akan membalas laporan anda!
-      </div>
-    </div>
-  </div>
-</div>
