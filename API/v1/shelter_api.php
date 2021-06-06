@@ -34,23 +34,27 @@ if($data != null && $_SERVER['REQUEST_METHOD']=="POST"){
             if($keys[1] == "_email" && $keys[2] == "_password"){
                 $usr = $data[$keys[1]];
                 $pwd = $data[$keys[2]];
-                $qry = "SELECT * FROM user_auth WHERE _email='$usr' AND _passwd='$pwd' ";
-                $tmp =  $conn -> query($qry);
-                $data = $tmp -> fetch_array();
-                if($usr == $data['_email'] && $pwd == $data['_passwd']){
-                    $result = array(
-                        'response' => 'success',
-                        'data' => array(
-                            'id' => $data['id_auth'],
-                            'email' => $data['_email'],
-                            'full_name' => $data['_fname'],
-                            'address' => $data['_addr'],
-                            'gender' => $data['_gender']
-                        )
-                    );
-                    echo json_encode($result);
+                if(($usr != "" || $usr != null) && ($pwd != "" || $pwd != null)){
+                    $qry = "SELECT * FROM user_auth WHERE _email='$usr' AND _passwd='$pwd' ";
+                    $tmp =  $conn -> query($qry);
+                    $data = $tmp -> fetch_array();
+                    if($usr == $data['_email'] && $pwd == $data['_passwd']){
+                        $result = array(
+                            'response' => 'success',
+                            'data' => array(
+                                'id' => $data['id_auth'],
+                                'email' => $data['_email'],
+                                'full_name' => $data['_fname'],
+                                'address' => $data['_addr'],
+                                'gender' => $data['_gender']
+                            )
+                        );
+                        echo json_encode($result);
+                    }else{
+                    echo failCode('failed',101);
+                    }
                 }else{
-                   echo failCode('failed',101);
+                    echo failCode('data NULL or EMPTY!',101);
                 }
             }
         }else if ($data[$keys[0]] == "_register" && count($keys) == 5){ //Max Parameter+
