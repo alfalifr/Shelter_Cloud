@@ -28,25 +28,25 @@ if(!empty($_POST)){
   $pms = json_decode($out,true);
   $url=$pms['data']['link'];
 
-  echo $url;
 
 
 
-  // $data = array(
-  //   "_feedback" => true,
-  //   "from" => $_POST["userreport"],
-  //   "type" => $_POST["state"],
-  //   "msg" => $_POST["message"]
-  // );
-  // $json_enc = json_encode($data);
+  $data = array(
+    "_feedback" => true,
+    "from" => $_POST["userreport"],
+    "type" => $_POST["state"],
+    "msg" => $_POST["message"],
+    "imglink" => $url
+  );
+  $json_enc = json_encode($data);
     
-  // $ch = curl_init($API);
-  // curl_setopt($ch, CURLOPT_POSTFIELDS, $json_enc);
-  // curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
-  // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-  // curl_exec($ch);
-  // echo "<script>if(!alert('Laporan Anda Terkirim')){ window.location.replace('index.php'); }</script>";
-  // curl_close($ch);
+  $ch = curl_init($API);
+  curl_setopt($ch, CURLOPT_POSTFIELDS, $json_enc);
+  curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+  curl_exec($ch);
+  echo "<script>if(!alert('Laporan Anda Terkirim')){ window.location.replace('index.php'); }</script>";
+  curl_close($ch);
 }
 
 ?>
