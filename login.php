@@ -14,6 +14,7 @@ if(!empty($_POST)){
         "_password" => $_POST["_password"]
     );
     $json_enc = json_encode($data);
+    var_dump($json_enc);
      
     $ch = curl_init($API);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $json_enc);
