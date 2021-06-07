@@ -132,7 +132,7 @@ if($data != null && $_SERVER['REQUEST_METHOD']=="POST"){
                     echo filter_max($data_array, "Tanggal", $max);
                 }else if($keys[1] == "filter"){
                     $filter = $data[$keys[1]];
-                    echo filter_json($data_array, "Name", $min);
+                    echo filter_json($data_array, "Name", $filter);
                 }
             }else{
                 echo $gempa_json;
