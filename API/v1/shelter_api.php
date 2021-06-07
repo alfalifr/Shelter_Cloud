@@ -135,15 +135,15 @@ if($data != null && $_SERVER['REQUEST_METHOD']=="POST"){
             if(isset($keys[1]) && isset($keys[2]) || isset($keys[2]) && isset($keys[1])){
                 $min = $data[$keys[1]];
                 $max = $data[$keys[2]];
-                echo filter_cuaca_1($data_array, "Date", $min, $max);
+                echo filter_minmax($data_array, "Date", $min, $max);
             }else if(isset($keys[1])){
                 if($keys[1] == "min"){ //Extra Parameter {min}
                     $min = $data[$keys[1]];
-                    echo filter_cuaca_2($data_array, "Date", $min);
+                    echo filter_min($data_array, "Date", $min);
                 }else if($keys[1] == "max"){ //Extra Parameter {max}
                     $max = $data[$keys[1]];
                     echo "F";
-                    echo filter_cuaca_3($data_array, "Date", $max);
+                    echo filter_max($data_array, "Date", $max);
                 }
             }else{
                 echo $cuaca_json;
@@ -165,11 +165,18 @@ if($data != null && $_SERVER['REQUEST_METHOD']=="POST"){
         }else if($data[$keys[0]] == "karhutla"){
             $data_array = json_decode($karhutla_json, 1);
             $filter = "";
-            if(isset($keys[1])){
-                if($keys[1] == "filter_city" && $keys[2] == "value"){
-                    $filter = $data[$keys[1]];
-                    $field = $data[$keys[2]];
-                    echo filter_json($data_array, $filter, $field);
+            if(isset($keys[1]) && isset($keys[2]) || isset($keys[2]) && isset($keys[1])){
+                $min = $data[$keys[1]];
+                $max = $data[$keys[2]];
+                echo filter_minmax($data_array, "Tanggal", $min, $max);
+            }else if(isset($keys[1])){
+                if($keys[1] == "min"){ //Extra Parameter {min}
+                    $min = $data[$keys[1]];
+                    echo filter_min($data_array, "Tanggal", $min);
+                }else if($keys[1] == "max"){ //Extra Parameter {max}
+                    $max = $data[$keys[1]];
+                    echo "F";
+                    echo filter_max($data_array, "Tanggal", $max);
                 }
             }else{
                 echo $karhutla_json;
@@ -266,7 +273,7 @@ function filter_json($str, $type, $var){
     return json_encode($res);
 }
 
-function filter_cuaca_1($str, $type, $min, $max){
+function filter_minmax($str, $type, $min, $max){
     $res = array();
     $_min = strtotime($min);
     $_max = strtotime($max);
@@ -279,7 +286,7 @@ function filter_cuaca_1($str, $type, $min, $max){
     return json_encode($res);
 }
 
-function filter_cuaca_2($str, $type, $min){
+function filter_min($str, $type, $min){
     $res = array();
     $_min = strtotime($min);
     foreach($str as $key => $val){
@@ -291,7 +298,7 @@ function filter_cuaca_2($str, $type, $min){
     return json_encode($res);
 }
 
-function filter_cuaca_3($str, $type, $max){
+function filter_max($str, $type, $max){
     $res = array();
     $_max = strtotime($max);
     foreach($str as $key => $val){
