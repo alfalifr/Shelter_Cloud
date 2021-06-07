@@ -118,11 +118,22 @@ if($data != null && $_SERVER['REQUEST_METHOD']=="POST"){
         }else if($data[$keys[0]] == "gempa"){
             $data_array = json_decode($gempa_json, 1);
             $filter = "";
-            if(isset($keys[1])){
-                if($keys[1] == "filter"){
+            if(isset($keys[1]) && isset($keys[2]) || isset($keys[2]) && isset($keys[1])){
+                $min = $data[$keys[1]];
+                $max = $data[$keys[2]];
+                echo filter_minmax($data_array, "Tanggal", $min, $max);
+            }else if(isset($keys[1])){
+                if($keys[1] == "min"){ //Extra Parameter {min}
+                    $min = $data[$keys[1]];
+                    echo filter_min($data_array, "Tanggal", $min);
+                }else if($keys[1] == "max"){ //Extra Parameter {max}
+                    $max = $data[$keys[1]];
+                    echo "F";
+                    echo filter_max($data_array, "Tanggal", $max);
+                }else if($keys[1] == "filter"){
                     $filter = $data[$keys[1]];
-                    echo filter_json($data_array, "Name", $filter);
-                }   
+                    echo filter_json($data_array, "Name", $min);
+                }
             }else{
                 echo $gempa_json;
             }
