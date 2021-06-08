@@ -241,7 +241,7 @@ if($data != null && $_SERVER['REQUEST_METHOD']=="POST"){
             $_gend = $data[$keys[4]];
             $_pass = $data[$keys[5]];
             
-            $qry = "UPDATE user_auth SET _fname = '$_name', _addr = '$_addr', _gender = '$_gend', _passwd = '$_pass'  WHERE id_auth = '$id' ";
+            $qry = "UPDATE user_auth SET _fname = '$_name', _addr = '$_addr', _gender = '$_gend', _passwd = '$_pass'  WHERE id_auth = $id ";
             $tmp =  $conn -> query($qry);
             
             
