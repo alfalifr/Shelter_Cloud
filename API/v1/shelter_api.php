@@ -234,14 +234,14 @@ if($data != null && $_SERVER['REQUEST_METHOD']=="POST"){
                     
             
             echo json_encode($result);
-        }else if($data[$keys[0]] == "updateProfile" && $keys[1] == "id" && $keys[2] == "name" && $keys[3] == "address" && $keys[4] == "gender"){
+        }else if($data[$keys[0]] == "updateProfile" && $keys[1] == "id" && $keys[2] == "new_name" && $keys[3] == "new_addr" && $keys[4] == "new_gender" && $keys[5] == "new_pass"){
             $id = $data[$keys[1]];
             $_name = $data[$keys[2]];
             $_addr = $data[$keys[3]];
             $_gend = $data[$keys[4]];
+            $_pass = $data[$keys[5]];
             
-            
-            $qry = "UPDATE user_auth SET _fname = '$_name', _addr = '$_addr', _gender = '$_gend' WHERE id_auth = '$id' ";
+            $qry = "UPDATE user_auth SET _fname = '$_name', _addr = '$_addr', _gender = '$_gend', _passwd = '$_pass'  WHERE id_auth = '$id' ";
             $tmp =  $conn -> query($qry);
             
             
