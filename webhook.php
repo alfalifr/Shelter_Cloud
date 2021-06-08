@@ -34,16 +34,10 @@ while(true){
                 $qry = "SELECT * FROM report WHERE _status = 0";
                 $exe = $conn -> query($qry);
                 
-                $mail = "";
                 while($dat = $exe -> fetch_array()){
-                    if(isset($dat['_email'])){
-                        $mail = $dat['_email'];
-                    }else{
-                        $mail = "Anonim";
-                    }
                     $msg = "";
                     $msg = $msg."CASE ID : ".$dat['id_report']."\n\n";
-                    $msg = $msg."From : ".$mail."\n";
+                    $msg = $msg."From : ".$dat['_from']."\n";
                     $msg = $msg."Time : ".$dat['_timestamp']."\n";
                     $msg = $msg."Type : ".$dat['_type']."\n";
                     $msg = $msg."Message : ".$dat['_msg']."\n";
