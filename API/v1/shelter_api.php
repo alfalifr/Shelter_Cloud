@@ -186,8 +186,10 @@ if($data != null && $_SERVER['REQUEST_METHOD']=="POST"){
                     echo filter_min($data_array, "Tanggal", $min);
                 }else if($keys[1] == "max"){ //Extra Parameter {max}
                     $max = $data[$keys[1]];
-                    echo "F";
                     echo filter_max($data_array, "Tanggal", $max);
+                }else if($keys[1] == "kota"){ //Extra Parameter {max}
+                    $max = $data[$keys[1]];
+                    echo filter_max($data_array, "Name", $max);
                 }
             }else{
                 echo $karhutla_json;
@@ -210,9 +212,47 @@ if($data != null && $_SERVER['REQUEST_METHOD']=="POST"){
         }else if($data[$keys[0]] == "desa_banjir"){
             $data_array = json_decode($banjir_json, 1);
             echo get_city($data_array, "desa");
+        }else if($data[$keys[0]] == "getProfile" && $keys[1] == "id"){
+            $id = $data[$keys[1]];
+            $qry = "SELECT * FROM user_auth WHERE id_auth = '$id' ";
+            $tmp =  $conn -> query($qry);
+            $data = $tmp -> fetch_array();
+            if($data != null){
+                $result = array(
+                    'response' => 'success',
+                    'data' => array(
+                        'id' => $data['id_auth'],
+                        'email' => $data['_email'],
+                        'full_name' => $data['_fname'],
+                        'address' => $data['_addr'],
+                        'gender' => $data['_gender']
+                    )
+                );
+            }else{
+                $result = array('response' => 'failed');
+            }
+                    
+            
+            echo json_encode($result);
+        }else if($data[$keys[0]] == "updateProfile" && $keys[1] == "id" && $keys[2] == "name" && $keys[3] == "address" && $keys[4] == "gender"){
+            $id = $data[$keys[1]];
+            $_name = $data[$keys[2]];
+            $_addr = $data[$keys[3]];
+            $_gend = $data[$keys[4]];
+            
+            
+            $qry = "UPDATE user_auth SET _fname = '$_name', _addr = '$_addr', _gender = '$_gend' WHERE id_auth = '$id' ";
+            $tmp =  $conn -> query($qry);
+            
+            
+            if($tmp){
+                $result = array('response' => 'success');
+            }else{
+                $result = array('response' => 'failed');
+            }
+            echo json_encode($result);
         }
     }else if($keys[0] == "_feedback" && $keys[1] == "from" && $keys[2] == "type" && $keys[3] == "msg" && $keys[4] == "imglink" ) {
-        
         if($data[$keys[0]] == true){
             $_frm = $data[$keys[1]];
             $_typ = $data[$keys[2]];
@@ -238,13 +278,13 @@ if($data != null && $_SERVER['REQUEST_METHOD']=="POST"){
             }else{
                 echo "Fail";
             }
-        }
-    }
-    else{
+        
+        }else{
+            echo failCode('failed',102);
+        }       
+    }else{
         echo failCode('failed',102);
-    }       
-}else{
-    echo failCode('failed',102);
+    }
 }
 
 function failCode($res, $code){
