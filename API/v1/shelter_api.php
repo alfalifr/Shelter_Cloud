@@ -214,8 +214,8 @@ if($data != null && $_SERVER['REQUEST_METHOD']=="POST"){
             echo get_city($data_array, "desa");
         }else if($data[$keys[0]] == "getProfile" && $keys[1] == "id"){
             $id = $data[$keys[1]];
-            if(is_int($id)){
-                $qry = "SELECT * FROM user_auth WHERE id_auth = $id ";
+            if(is_string($id)){
+                $qry = "SELECT * FROM user_auth WHERE _email = '$id' ";
                 $tmp =  $conn -> query($qry);
                 $data = $tmp -> fetch_array();
                 if($data != null){
@@ -246,7 +246,8 @@ if($data != null && $_SERVER['REQUEST_METHOD']=="POST"){
             if(is_string($id)){
                 $qry = "UPDATE user_auth SET _fname = '$_name', _addr = '$_addr', _gender = '$_gend', _passwd = '$_pass'  WHERE _email = '$id' ";
                 $tmp =  $conn -> query($qry);
-                if($tmp){
+                $data = mysqli_affected_rows($conn);
+                if($data){
                     $result = array('response' => 'success');
                 }else{
                     $result = array('response' => 'failed');
