@@ -235,7 +235,7 @@ if($data != null && $_SERVER['REQUEST_METHOD']=="POST"){
             
             echo json_encode($result);
         }else if($data[$keys[0]] == "updateProfile" && $keys[1] == "id" && $keys[2] == "new_name" && $keys[3] == "new_addr" && $keys[4] == "new_gender" && $keys[5] == "new_pass"){
-            $id = $data[$keys[1]];
+            $id = (int)$data[$keys[1]];
             $_name = $data[$keys[2]];
             $_addr = $data[$keys[3]];
             $_gend = $data[$keys[4]];
