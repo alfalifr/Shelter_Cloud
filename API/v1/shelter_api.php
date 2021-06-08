@@ -243,8 +243,8 @@ if($data != null && $_SERVER['REQUEST_METHOD']=="POST"){
             $_addr = $data[$keys[3]];
             $_gend = $data[$keys[4]];
             $_pass = $data[$keys[5]];
-            if(is_int($id)){
-                $qry = "UPDATE user_auth SET _fname = '$_name', _addr = '$_addr', _gender = '$_gend', _passwd = '$_pass'  WHERE id_auth = $id ";
+            if(is_string($id)){
+                $qry = "UPDATE user_auth SET _fname = '$_name', _addr = '$_addr', _gender = '$_gend', _passwd = '$_pass'  WHERE _email = '$id' ";
                 $tmp =  $conn -> query($qry);
                 if($tmp){
                     $result = array('response' => 'success');
