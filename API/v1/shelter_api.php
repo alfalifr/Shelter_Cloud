@@ -281,12 +281,12 @@ if($data != null && $_SERVER['REQUEST_METHOD']=="POST"){
                 $msg = $msg."Message : ".$_msg."\n";
                 $msg = $msg."Picture : ".$_img."\n";
                 telegram ($msg);
+                echo json_encode(array('response' => 'success'));
             }else{
-                echo "Fail";
+                echo json_encode(array('response' => 'failed'));
             }
-        
         }else{
-            echo failCode('failed',102);
+            echo json_encode(array('response' => 'failed'));
         }       
     }else{
         echo failCode('failed',102);
