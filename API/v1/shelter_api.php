@@ -214,42 +214,48 @@ if($data != null && $_SERVER['REQUEST_METHOD']=="POST"){
             echo get_city($data_array, "desa");
         }else if($data[$keys[0]] == "getProfile" && $keys[1] == "id"){
             $id = $data[$keys[1]];
-            $qry = "SELECT * FROM user_auth WHERE id_auth = '$id' ";
-            $tmp =  $conn -> query($qry);
-            $data = $tmp -> fetch_array();
-            if($data != null){
-                $result = array(
-                    'response' => 'success',
-                    'data' => array(
-                        'id' => $data['id_auth'],
-                        'email' => $data['_email'],
-                        'full_name' => $data['_fname'],
-                        'address' => $data['_addr'],
-                        'gender' => $data['_gender']
-                    )
-                );
+            if(is_int($id)){
+                $qry = "SELECT * FROM user_auth WHERE id_auth = $id ";
+                $tmp =  $conn -> query($qry);
+                $data = $tmp -> fetch_array();
+                if($data != null){
+                    $result = array(
+                        'response' => 'success',
+                        'data' => array(
+                            'id' => $data['id_auth'],
+                            'email' => $data['_email'],
+                            'full_name' => $data['_fname'],
+                            'address' => $data['_addr'],
+                            'gender' => $data['_gender']
+                        )
+                    );
+                }else{
+                    $result = array('response' => 'failed');
+                }
             }else{
                 $result = array('response' => 'failed');
             }
-                    
             
             echo json_encode($result);
         }else if($data[$keys[0]] == "updateProfile" && $keys[1] == "id" && $keys[2] == "new_name" && $keys[3] == "new_addr" && $keys[4] == "new_gender" && $keys[5] == "new_pass"){
-            $id = (int)$data[$keys[1]];
+            $id = $data[$keys[1]];
             $_name = $data[$keys[2]];
             $_addr = $data[$keys[3]];
             $_gend = $data[$keys[4]];
             $_pass = $data[$keys[5]];
-            
-            $qry = "UPDATE user_auth SET _fname = '$_name', _addr = '$_addr', _gender = '$_gend', _passwd = '$_pass'  WHERE id_auth = $id ";
-            $tmp =  $conn -> query($qry);
-            
-            
-            if($tmp){
-                $result = array('response' => 'success');
+            if(is_int($id)){
+                $qry = "UPDATE user_auth SET _fname = '$_name', _addr = '$_addr', _gender = '$_gend', _passwd = '$_pass'  WHERE id_auth = $id ";
+                $tmp =  $conn -> query($qry);
+                if($tmp){
+                    $result = array('response' => 'success');
+                }else{
+                    $result = array('response' => 'failed');
+                }
             }else{
                 $result = array('response' => 'failed');
             }
+            
+            
             echo json_encode($result);
         }
     }else if($keys[0] == "_feedback" && $keys[1] == "from" && $keys[2] == "type" && $keys[3] == "msg" && $keys[4] == "imglink" ) {
