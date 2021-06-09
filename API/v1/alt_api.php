@@ -189,7 +189,7 @@ if($data != null && $_SERVER['REQUEST_METHOD']=="POST"){
             $data_array = json_decode($banjir_json, 1);
             echo get_city($data_array, "desa");      
         }else if($data["_requestType"] == "getProfile" && isset($data["email"])){
-            $id = $data["id"];
+            $id = $data["email"];
             if(is_string($id)){
                 $qry = "SELECT * FROM user_auth WHERE _email = '$id' ";
                 $tmp =  $conn -> query($qry);
@@ -214,7 +214,7 @@ if($data != null && $_SERVER['REQUEST_METHOD']=="POST"){
             echo json_encode($result);
             
         }else if($data["_requestType"] == "updateProfile" && isset($data["email"]) && isset($data["new_name"]) && isset($data["new_addr"]) && isset($data["new_gender"]) && isset($data["new_pass"]) ){
-            $id = $data["id"];
+            $id = $data["email"];
             $_name = $data["new_name"];
             $_addr = $data["new_addr"];
             $_gend = $data["new_gender"];
