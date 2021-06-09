@@ -28,7 +28,7 @@ if($data != null && $_SERVER['REQUEST_METHOD']=="POST"){
                 $qry = "SELECT * FROM user_auth WHERE _email='$usr' AND _passwd='$pwd' ";
                 $tmp =  $conn -> query($qry);
                 $arr = $tmp -> fetch_array();
-                if($usr == $data['_email'] && $pwd == $data['_passwd']){
+                if($usr == $arr['_email'] && $pwd == $arr['_passwd']){
                     $result = array(
                         'response' => 'success',
                         'data' => array(
