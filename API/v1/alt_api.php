@@ -131,13 +131,13 @@ if($data != null && $_SERVER['REQUEST_METHOD']=="POST"){
             if(isset($data["min"]) && isset($data["max"])){
                 $min = $data["min"];
                 $max = $data["max"];
-                echo filter_minmax($data_array, "Tanggal", $min, $max);
+                echo filter_minmax($data_array, "Date", $min, $max);
             }else if(isset($data["min"])){
                 $min = $data["min"];
-                echo filter_min($data_array, "Tanggal", $min);
+                echo filter_min($data_array, "Date", $min);
             }else if(isset($data["max"])){
                 $max = $data["max"];
-                echo filter_max($data_array, "Tanggal", $max);
+                echo filter_max($data_array, "Date", $max);
             }else{
                 echo $cuaca_json;
             }
@@ -181,7 +181,7 @@ if($data != null && $_SERVER['REQUEST_METHOD']=="POST"){
             $filter = "";
             if(isset($data["filter"])){
                 $filter = $data["filter"];
-                echo filter_json($data_array, "lokasi", $filter); 
+                echo filter_json($data_array, "desa", $filter); 
             }else{
                 echo $banjir_json;
             }
